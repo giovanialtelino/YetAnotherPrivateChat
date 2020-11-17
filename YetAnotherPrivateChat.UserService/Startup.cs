@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http.Json;
 using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 using YetAnotherPrivateChat.UserService.Context;
 using YetAnotherPrivateChat.UserService.Service;
 
@@ -41,11 +42,23 @@ namespace YetAnotherPrivateChat.UserService
                 });
                 endpoints.MapGet("/login", async context =>
                 {
+                    MyDbContext _context = new MyDbContext();
+                    var log = new Login();
 
+                    var dto = await context.Request.ReadFromJsonAsync<UserDTO>();
+
+                    var result = await log.AllowLogin(dto.Username, dto.Password, _context);
+                    await context.Response.WriteAsJsonAsync(result);
                 });
                 endpoints.MapPost("/refresh", async context =>
                 {
+                    MyDbContext _context = new MyDbContext();
+                    var refresh = new Refresh();
 
+                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+
+                    var result = await refresh.RefreshJWT(dto.Token, _context);
+                    await context.Response.WriteAsJsonAsync(result);
                 });
                 endpoints.MapPost("/register", async context =>
                 {
@@ -60,7 +73,7 @@ namespace YetAnotherPrivateChat.UserService
                 });
                 endpoints.MapGet("/userlist", async context =>
                 {
-
+                    await Task.Delay(100);
                 });
             });
         }

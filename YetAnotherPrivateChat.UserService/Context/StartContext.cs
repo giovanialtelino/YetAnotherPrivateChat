@@ -10,6 +10,7 @@ namespace YetAnotherPrivateChat.UserService.Context
     {
         public static void StartDb(MyDbContext ctx)
         {
+            ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
         }
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 
 namespace YetAnotherPrivateChat.UserService.Context
 {
@@ -26,8 +27,16 @@ namespace YetAnotherPrivateChat.UserService.Context
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.UserId).ValueGeneratedOnAdd();
             });
+
+            modelbuilder.Entity<RefreshTokenDb>().ToTable("RefreshTokenDb");
+            modelbuilder.Entity<RefreshTokenDb>(entity =>
+            {
+                entity.HasKey(e => e.RefreshTokenDbId);
+                entity.Property(e => e.RefreshTokenDbId).ValueGeneratedOnAdd();
+            });
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshTokenDb> RefreshDb { get; set; }
     }
 }

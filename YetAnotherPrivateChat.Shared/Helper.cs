@@ -3,6 +3,8 @@ using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Security.Cryptography;
+using BCrypt;
 
 namespace YetAnotherPrivateChat.Shared.HelperShared
 {
@@ -10,7 +12,7 @@ namespace YetAnotherPrivateChat.Shared.HelperShared
     {
         public Tuple<bool, string> AprrovedMessage(string msg)
         {
-            if(msg.Length <= 0) return new Tuple<bool, string>(false, "Message must have at least one character");
+            if (msg.Length <= 0) return new Tuple<bool, string>(false, "Message must have at least one character");
             return new Tuple<bool, string>(true, "");
         }
 
@@ -52,6 +54,26 @@ namespace YetAnotherPrivateChat.Shared.HelperShared
 
             if (error.Length is 0) return new Tuple<bool, string>(true, error);
             return new Tuple<bool, string>(false, error);
+        }
+
+        public string HashPassword(string pwd)
+        {
+            //Doing it like dropbox, besides the AES at the end;
+            //Leaving the bcrypt at the default 11
+            string hash = BCrypt.Net.BCrypt.EnhancedHashPassword(pwd, hashType: BCrypt.Net.HashType.SHA512);
+            return hash;
+        }
+
+        public string HashEmail(string email)
+        {
+            string hash = BCrypt.Net.BCrypt.HashPassword(email);
+            return hash;
+        }
+
+        public bool ComparePassword(string hash, string pwd)
+        {
+            bool equal = BCrypt.Net.BCrypt.EnhancedVerify(pwd, hash, hashType: BCrypt.Net.HashType.SHA512);
+            return equal;
         }
 
     }

@@ -3,18 +3,20 @@ using System.Collections;
 using YetAnotherPrivateChat.Shared.UserClass;
 using YetAnotherPrivateChat.Shared.ReferenceMessageClass;
 using YetAnotherPrivateChat.Shared.HelperShared;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YetAnotherPrivateChat.Shared.MessageClass
 {
     public class Message
     {
-        private int MessageId { get; set; }
-        private string MessageText { get; set; }
-        private DateTime MessageTime { get; set; }
-        private int UserId { get; set; }
-        private User User { get; set; }
-        private Reply Reply { get; set; }
-        private int? ReplyId { get; set; }
+        public int MessageId { get; set; }
+        public string MessageText { get; set; }
+        public DateTime MessageTime { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        [NotMapped]
+        public Reply Reply { get; set; }
+        public int? ReplyId { get; set; }
 
         public Message(string messageText, int userId)
         {

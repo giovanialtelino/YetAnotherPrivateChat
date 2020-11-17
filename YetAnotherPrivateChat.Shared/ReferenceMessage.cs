@@ -1,16 +1,20 @@
 using System;
 using System.Collections;
 using YetAnotherPrivateChat.Shared.MessageClass;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YetAnotherPrivateChat.Shared.ReferenceMessageClass
 {
     public class Reply
     {
-        private int ReplyId { get; set; }
-        private Message Original { get; set; }
-        private int OriginalId { get; set; }
-        private Message Answer { get; set; }
-        private int AnswerId { get; set; }
+        public int ReplyId { get; set; }
+        [NotMapped]
+        public Message Original { get; set; }
+        public int? OriginalId { get; set; }
+        [NotMapped]
+        public Message Answer { get; set; }
+        public int? AnswerId { get; set; }
+        public Reply() { }
         public Reply(int answerId, int originalId)
         {
             AnswerId = answerId;
