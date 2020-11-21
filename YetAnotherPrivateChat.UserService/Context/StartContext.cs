@@ -1,5 +1,5 @@
 using System;
-using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared;
 using System.IO;
 using System.IO.Enumeration;
 using System.Threading.Tasks;

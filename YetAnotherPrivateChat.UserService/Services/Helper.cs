@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared;
 using YetAnotherPrivateChat.UserService.Context;
 
 

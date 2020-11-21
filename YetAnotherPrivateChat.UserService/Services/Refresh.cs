@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared;
 using YetAnotherPrivateChat.Shared.HelperShared;
 using YetAnotherPrivateChat.UserService.Context;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +61,25 @@ namespace YetAnotherPrivateChat.UserService.Service
 
             var refreshDb = await ctx.RefreshDb.FirstOrDefaultAsync(c => c.RefreshTokenDbId == decoded.id);
             refreshDb.InvalidateToken();
+
+            await ctx.SaveChangesAsync();
+        }
+        public async Task DisableAllRefreshToken(string token, MyDbContext ctx)
+        {
+            /*
+            Set the specific refresh token as invalid, could be called if the user ask for log out, or a new refresh token is created.
+            */
+            var refresh = new RefreshToken(token);
+            var decoded = refresh.DecodeToken();
+
+            var userId = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == decoded.id);
+
+            var refreshTokens = await ctx.RefreshDb.Where(c => c.UserId == userId.UserId).ToListAsync();
+
+            foreach (var t in refreshTokens)
+            {
+                t.InvalidateToken();
+            }
 
             await ctx.SaveChangesAsync();
         }

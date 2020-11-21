@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http.Json;
-using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared;
 using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 using YetAnotherPrivateChat.UserService.Context;
 using YetAnotherPrivateChat.UserService.Service;
@@ -73,7 +73,33 @@ namespace YetAnotherPrivateChat.UserService
                 });
                 endpoints.MapGet("/userlist", async context =>
                 {
-                    await Task.Delay(100);
+                    MyDbContext _context = new MyDbContext();
+                    var us = new UserList();
+
+                    var result = await us.GetUsers(_context);
+                    await context.Response.WriteAsJsonAsync(result);
+                });
+                endpoints.MapGet("/logoff", async context =>
+                {
+                    MyDbContext _context = new MyDbContext();
+                    var off = new Refresh();
+
+                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+
+                    await off.DisableRefreshToken(dto.Token, _context);
+                    await context.Response.WriteAsync("Logged off");
+
+                });
+                endpoints.MapGet("/logoffall", async context =>
+                {
+                    MyDbContext _context = new MyDbContext();
+
+                    var off = new Refresh();
+
+                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+
+                    await off.DisableAllRefreshToken(dto.Token, _context);
+                    await context.Response.WriteAsync("Logged off from all devices");
                 });
             });
         }

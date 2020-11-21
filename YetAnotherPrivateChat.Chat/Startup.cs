@@ -34,6 +34,22 @@ namespace YetAnotherPrivateChat.Chat
                 {
                     await context.Response.WriteAsync("Hello World!");
                 });
+                endpoints.MapGet("/loadpagination", async context =>
+                {
+
+                });
+                endpoints.MapGet("/loadsince", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
+                endpoints.MapGet("/loadresponses", async context =>
+                {
+
+                });
+                endpoints.MapGet("/realtime", async context =>
+                {
+
+                });
             });
         }
     }

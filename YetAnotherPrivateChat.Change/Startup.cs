@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using YetAnotherPrivateChat.Change.Context;
+using YetAnotherPrivateChat.Change.Service;
 
 namespace YetAnotherPrivateChat.Change
 {
@@ -16,6 +18,7 @@ namespace YetAnotherPrivateChat.Change
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MyDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +37,31 @@ namespace YetAnotherPrivateChat.Change
                 {
                     await context.Response.WriteAsync("I'm alive");
                 });
+                endpoints.MapPost("/addmessage", async context =>
+                {
+                    MyDbContext _context = new MyDbContext();
+                    var add = new AddMessage();
+
+
+                });
+                endpoints.MapPost("/editmessage", async context =>
+                {
+                    MyDbContext _context = new MyDbContext();
+                    var edit = new EditMessage();
+
+                });
+                endpoints.MapPost("/deletemessage", async context =>
+                {
+                    MyDbContext _context = new MyDbContext();
+                    var delete = new DeleteMessage();
+
+                });
+                endpoints.MapPost("/star", async context =>
+              {
+                  MyDbContext _context = new MyDbContext();
+                  var star = new StarMessage();
+
+              });
             });
         }
     }

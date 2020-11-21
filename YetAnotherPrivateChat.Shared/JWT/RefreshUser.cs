@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using YetAnotherPrivateChat.Shared.UserClass;
 
 namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
 {

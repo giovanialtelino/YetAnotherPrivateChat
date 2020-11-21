@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using YetAnotherPrivateChat.Change.Context;
 
 namespace YetAnotherPrivateChat.Change
 {
@@ -13,6 +14,8 @@ namespace YetAnotherPrivateChat.Change
     {
         public static void Main(string[] args)
         {
+            var ctx = new MyDbContext();
+            StartDbContext.StartDb(ctx);
             CreateHostBuilder(args).Build().Run();
         }
 

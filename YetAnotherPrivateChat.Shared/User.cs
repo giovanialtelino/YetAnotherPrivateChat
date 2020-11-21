@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
-using YetAnotherPrivateChat.Shared.MessageClass;
 using YetAnotherPrivateChat.Shared.HelperShared;
 using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 
-namespace YetAnotherPrivateChat.Shared.UserClass
+namespace YetAnotherPrivateChat.Shared
 {
-    public record UserDTO
+    public class UserDTO
     {
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public Byte[] Avatar { get; private set; }
+        public DateTime RegistrationDate { get; private set; }
         public UserDTO() { }
         public UserDTO(string username, string email, string password)
         {
@@ -23,6 +24,8 @@ namespace YetAnotherPrivateChat.Shared.UserClass
             Username = user.Username;
             Email = user.Email;
             Password = "";
+            Avatar = user.Avatar;
+            RegistrationDate = user.RegistrationDate;
         }
     }
 
@@ -36,6 +39,8 @@ namespace YetAnotherPrivateChat.Shared.UserClass
         public DateTime RegistrationDate { get; private set; }
         public List<Message> Messages { get; private set; }
         public List<RefreshTokenDb> RefreshTokens { get; }
+        public List<Room> Rooms { get; private set; }
+        public List<Quote> Quotes {get; private set;}
         public User() { }
 
         public User(string username, string email, string password)

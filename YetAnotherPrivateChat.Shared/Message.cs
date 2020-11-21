@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using YetAnotherPrivateChat.Shared.UserClass;
-using YetAnotherPrivateChat.Shared.ReferenceMessageClass;
+using System.Collections.Generic;
 using YetAnotherPrivateChat.Shared.HelperShared;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YetAnotherPrivateChat.Shared.MessageClass
+namespace YetAnotherPrivateChat.Shared
 {
     public class Message
     {
@@ -17,7 +16,10 @@ namespace YetAnotherPrivateChat.Shared.MessageClass
         [NotMapped]
         public Reply Reply { get; set; }
         public int? ReplyId { get; set; }
-
+        public int Version { get; set; }
+        public List<Quote> Quotes { get; set; }
+        public Room Room { get; set; }
+        public int RoomId { get; set; }
         public Message(string messageText, int userId)
         {
             var msg = new Helper().AprrovedMessage(messageText);

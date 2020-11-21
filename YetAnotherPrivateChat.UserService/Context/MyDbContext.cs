@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-using YetAnotherPrivateChat.Shared.UserClass;
+using YetAnotherPrivateChat.Shared;
 using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 
 namespace YetAnotherPrivateChat.UserService.Context

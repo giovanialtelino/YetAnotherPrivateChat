@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using YetAnotherPrivateChat.Shared.MessageClass;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YetAnotherPrivateChat.Shared.ReferenceMessageClass
+namespace YetAnotherPrivateChat.Shared
 {
     public class Reply
     {
