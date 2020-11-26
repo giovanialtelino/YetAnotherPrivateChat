@@ -11,16 +11,16 @@ using YetAnotherPrivateChat.Shared.DTO;
 
 namespace YetAnotherPrivateChat.Change.Service
 {
-    public class AddMessage
+    public class AddRoom
     {
-        public async Task<Message> Add(NewMessageDTO newMessage, int jwtOwner, MyDbContext _context)
+        public async Task<Room> Add(NewRoomDTO newRoom, int jwtOwner, MyDbContext _context)
         {
-            var message = new Message(newMessage, jwtOwner);
+            var room = new Room(newRoom);
 
-            _context.Messages.Add(message);
+            _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
-            return message;
+            return room;
         }
     }
 

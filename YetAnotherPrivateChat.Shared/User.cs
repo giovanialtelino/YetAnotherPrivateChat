@@ -40,7 +40,8 @@ namespace YetAnotherPrivateChat.Shared
         public List<Message> Messages { get; private set; }
         public List<RefreshTokenDb> RefreshTokens { get; }
         public List<Room> Rooms { get; private set; }
-        public List<Quote> Quotes {get; private set;}
+        public List<Quote> Quotes { get; private set; }
+        public List<Star> Stars { get; private set; }
         public User() { }
 
         public User(string username, string email, string password)

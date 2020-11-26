@@ -30,11 +30,15 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
                         .AddClaim("id", userId)
                         .AddClaim("date", userDate)
                         .Encode();
-                        
+
             Token = token;
         }
+    }
 
-        public JwtData DecodeToken(string token)
+    public static class Decoder
+    {
+        private static string _secret = "bad-secret";
+        public static JwtData DecodeToken(string token)
         {
             var json = new JwtBuilder()
                     .WithAlgorithm(new HMACSHA256Algorithm()) // symmetric

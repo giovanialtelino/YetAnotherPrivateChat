@@ -48,11 +48,19 @@ namespace YetAnotherPrivateChat.Change.Context
                 entity.HasKey(e => e.RoomID);
                 entity.Property(e => e.RoomID).ValueGeneratedOnAdd();
             });
+
+            modelbuilder.Entity<Star>().ToTable("Star");
+            modelbuilder.Entity<Star>(entity =>
+            {
+                entity.HasKey(e => e.StarID);
+                entity.Property(e => e.StarID).ValueGeneratedOnAdd();
+            });
         }
 
         public DbSet<Message> Messages { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Star> Stars { get; set; }
     }
 }
