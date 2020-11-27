@@ -10,6 +10,14 @@ namespace YetAnotherPrivateChat.UserService.Context
 {
     public class MyDbContext : DbContext
     {
+        public MyDbContext()          
+        {
+        }
+
+          public MyDbContext(DbContextOptions<MyDbContext> options)
+            : base(options)
+        {
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //string dbString = Environment.GetEnvironmentVariable("ConnectionString");
