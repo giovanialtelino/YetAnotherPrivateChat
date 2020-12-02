@@ -7,6 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using YetAnotherPrivateChat.UserService.Context;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+
+
 
 namespace YetAnotherPrivateChat.UserService
 {
@@ -14,8 +18,8 @@ namespace YetAnotherPrivateChat.UserService
     {
         public static void Main(string[] args)
         {
-            var ctx = new MyDbContext();
-            StartDbContext.StartDb(ctx);
+            var dbContext = new MyDbContext();
+            StartDbContext.StartDb(dbContext);
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -13,12 +13,14 @@ namespace YetAnotherPrivateChat.UserService.Service
     {
         public async Task<JwtRefreshDTO> RegisterUser(UserDTO dto, MyDbContext ctx)
         {
+            
             var helper = new Helper();
             if (!await helper.ValidateEmail(dto.Email)) throw new Exception("Email is invalid.");
             if (!await helper.AllowUsernameAndEmail(dto.Email, dto.Username, ctx)) throw new Exception("Username or email are already registered.");
 
             //save it as a user, them modify the pwd
-            var user = new User(dto);
+            var user = new User(dto); 
+            
             ctx.Users.Add(user);
             await ctx.SaveChangesAsync();
 

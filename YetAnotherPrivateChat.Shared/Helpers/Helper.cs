@@ -66,7 +66,7 @@ namespace YetAnotherPrivateChat.Shared.HelperShared
 
         public string HashEmail(string email)
         {
-            string hash = BCrypt.Net.BCrypt.HashPassword(email);
+            string hash = BCrypt.Net.BCrypt.EnhancedHashPassword(email, hashType: BCrypt.Net.HashType.SHA512);
             return hash;
         }
 
@@ -76,5 +76,10 @@ namespace YetAnotherPrivateChat.Shared.HelperShared
             return equal;
         }
 
+        public bool CompareEmail(string hash, string email)
+        {
+            bool equal = BCrypt.Net.BCrypt.EnhancedVerify(email, hash, hashType: BCrypt.Net.HashType.SHA512);
+            return equal;
+        }
     }
 }

@@ -12,6 +12,10 @@ using YetAnotherPrivateChat.Shared;
 using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 using YetAnotherPrivateChat.UserService.Context;
 using YetAnotherPrivateChat.UserService.Service;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore;
+using Npgsql;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace YetAnotherPrivateChat.UserService
 {
@@ -40,29 +44,28 @@ namespace YetAnotherPrivateChat.UserService
                 {
                     await context.Response.WriteAsync("I'm alive!");
                 });
-                endpoints.MapGet("/login", async context =>
+                endpoints.MapPost("/login", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
+                    var _context = new MyDbContext();
                     var log = new Login();
-
                     var dto = await context.Request.ReadFromJsonAsync<UserDTO>();
 
                     var result = await log.AllowLogin(dto.Username, dto.Password, _context);
                     await context.Response.WriteAsJsonAsync(result);
                 });
-                endpoints.MapPost("/refresh", async context =>
+                endpoints.MapGet("/refresh", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
+                    var _context = new MyDbContext();
                     var refresh = new Refresh();
 
-                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+                    var refreshToken = DecodeHeader.GetRefreshToken(context.Request.Headers);
 
-                    var result = await refresh.RefreshJWT(dto.Token, _context);
+                    var result = await refresh.RefreshJWT(refreshToken.Item1.id, refreshToken.Item2, _context);
                     await context.Response.WriteAsJsonAsync(result);
                 });
                 endpoints.MapPost("/register", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
+                    var _context = new MyDbContext();
                     var reg = new Register();
 
                     var dto = await context.Request.ReadFromJsonAsync<UserDTO>();
@@ -73,15 +76,18 @@ namespace YetAnotherPrivateChat.UserService
                 });
                 endpoints.MapGet("/userlist", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
+                    var _context = new MyDbContext();
                     var us = new UserList();
+
+                    //check if the JWT is valid, if there is none or invalid it will send a error back
+                    var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);
 
                     var result = await us.GetUsers(_context);
                     await context.Response.WriteAsJsonAsync(result);
                 });
-                endpoints.MapGet("/logoff", async context =>
+                endpoints.MapDelete("/logoff", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
+                    var _context = new MyDbContext();
                     var off = new Refresh();
 
                     var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
@@ -90,10 +96,9 @@ namespace YetAnotherPrivateChat.UserService
                     await context.Response.WriteAsync("Logged off");
 
                 });
-                endpoints.MapGet("/logoffall", async context =>
+                endpoints.MapDelete("/logoffall", async context =>
                 {
-                    MyDbContext _context = new MyDbContext();
-
+                    var _context = new MyDbContext();
                     var off = new Refresh();
 
                     var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();

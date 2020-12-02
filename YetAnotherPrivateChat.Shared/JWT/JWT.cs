@@ -35,7 +35,7 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
         }
     }
 
-    public static class Decoder
+    public static class DecodeJWT
     {
         private static string _secret = "bad-secret";
         public static JwtData DecodeToken(string token)

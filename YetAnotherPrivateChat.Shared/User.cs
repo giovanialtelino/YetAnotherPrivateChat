@@ -19,6 +19,11 @@ namespace YetAnotherPrivateChat.Shared
             Email = email;
             Password = password;
         }
+          public UserDTO(string username,  string password)
+        {
+            Username = username;
+            Password = password;
+        }
         public UserDTO(User user)
         {
             Username = user.Username;

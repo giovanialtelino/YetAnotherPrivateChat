@@ -12,19 +12,19 @@ namespace YetAnotherPrivateChat.UserService.Service
 {
     public class Refresh
     {
-        public async Task<JwtRefreshDTO> RefreshJWT(string refreshToken, MyDbContext ctx)
+        public async Task<JwtRefreshDTO> RefreshJWT(int tokenId, string refresh, MyDbContext ctx)
         {
-            var refreshHelper = new RefreshToken(refreshToken);
-            var decodeRefreshToken = refreshHelper.DecodeToken();
+            var refreshHelper = new RefreshToken(refresh);
 
-            var refreshTokenDb = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == decodeRefreshToken.id);
+            var refreshTokenDb = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
 
             if (!refreshTokenDb.Valid) throw new Exception("Credentials are invalid, log again.");
 
             //If it's still valid, just generate a new JWT
             var newJwt = new JwtToken(refreshTokenDb.User.UserId, refreshTokenDb.User.RegistrationDate);
 
-            if (refreshTokenDb.CreationDate.AddMonths(1) <= DateTime.Now) return new JwtRefreshDTO(await RefreshRefreshToken(refreshTokenDb.User.UserId, refreshToken, ctx), newJwt);
+            if (refreshTokenDb.CreationDate.AddMonths(1) <= DateTime.Now) return new JwtRefreshDTO(await RefreshRefreshToken(refreshTokenDb.User.UserId, refresh, ctx), newJwt);
+
             return new JwtRefreshDTO(refreshHelper, newJwt);
         }
 
@@ -56,8 +56,7 @@ namespace YetAnotherPrivateChat.UserService.Service
             /*
             Set the specific refresh token as invalid, could be called if the user ask for log out, or a new refresh token is created.
             */
-            var refresh = new RefreshToken(token);
-            var decoded = refresh.DecodeToken();
+            var decoded = DecodeRefresh.DecodeToken(token);
 
             var refreshDb = await ctx.RefreshDb.FirstOrDefaultAsync(c => c.RefreshTokenDbId == decoded.id);
             refreshDb.InvalidateToken();
@@ -69,8 +68,7 @@ namespace YetAnotherPrivateChat.UserService.Service
             /*
             Set the specific refresh token as invalid, could be called if the user ask for log out, or a new refresh token is created.
             */
-            var refresh = new RefreshToken(token);
-            var decoded = refresh.DecodeToken();
+            var decoded = DecodeRefresh.DecodeToken(token);
 
             var userId = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == decoded.id);
 

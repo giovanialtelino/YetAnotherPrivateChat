@@ -26,8 +26,17 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
             var jwt = header.FirstOrDefault(c => c.Key == "jwt").Value;
             if (string.IsNullOrWhiteSpace(jwt)) throw new Exception("No valid JWT found");
 
-            var helper = Decoder.DecodeToken(jwt);
+            var helper = DecodeJWT.DecodeToken(jwt);
             return helper;
+        }
+
+         public static Tuple<RefreshData, string> GetRefreshToken(IHeaderDictionary header)
+        {
+            var refresh = header.FirstOrDefault(c => c.Key == "ref").Value;
+            if (string.IsNullOrWhiteSpace(refresh)) throw new Exception("No valid token found");
+
+            var helper = DecodeRefresh.DecodeToken(refresh);
+            return new Tuple<RefreshData, string>(helper, refresh);
         }
     }
 }

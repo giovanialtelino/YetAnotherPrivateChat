@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using YetAnotherPrivateChat.UserService.Context;
+using System.Threading.Tasks;
 
 namespace YetAnotherPrivateChat.UserService.Test
 {
@@ -13,41 +14,18 @@ namespace YetAnotherPrivateChat.UserService.Test
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            string dbString = "Host=localhost;Database=privatechattest;User Id=admin;Password=patoverde1";
-
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(
-                                d => d.ServiceType == typeof(DbContextOptions<MyDbContext>));
-
-                services.Remove(descriptor);
-
-                services.AddDbContext<MyDbContext>(options =>
-                {
-                    options.UseNpgsql(dbString);
-                });
-
                 var sp = services.BuildServiceProvider();
 
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
                     var db = scopedServices.GetRequiredService<MyDbContext>();
-                    var logger = scopedServices.GetRequiredService<ILogger<WebApplicationFactory<TStartup>>>();
+                    //var logger = scopedServices.GetRequiredService<ILogger<WebApplicationFactory<TStartup>>>();
 
                     db.Database.EnsureDeleted();
                     db.Database.EnsureCreated();
-
-                    // try
-                    // {
-                    //     Utilities.InitializeDbForTests(db);
-                    // }
-                    // catch (Exception ex)
-                    // {
-
-                    //     logger.LogError(ex, "An error occurred seeding the " +
-                    //         "database with test messages. Error: {Message}", ex.Message);
-                    // }
                 }
             });
         }

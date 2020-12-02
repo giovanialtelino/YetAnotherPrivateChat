@@ -31,11 +31,14 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
 
             Token = token;
         }
+    }
 
+    public static class DecodeRefresh
+    {
+        private static string _secret = "another-bad-secret";
 
-        public RefreshData DecodeToken()
+        public static RefreshData DecodeToken(string token)
         {
-            var token = this.Token;
             try
             {
                 var json = new JwtBuilder()
@@ -61,4 +64,5 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
             }
         }
     }
+
 }

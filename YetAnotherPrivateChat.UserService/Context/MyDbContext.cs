@@ -10,21 +10,20 @@ namespace YetAnotherPrivateChat.UserService.Context
 {
     public class MyDbContext : DbContext
     {
-        public MyDbContext()          
-        {
-        }
-
-          public MyDbContext(DbContextOptions<MyDbContext> options)
-            : base(options)
+        public MyDbContext() { }
+        public MyDbContext(DbContextOptions<MyDbContext> options)
+          : base(options)
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //string dbString = Environment.GetEnvironmentVariable("ConnectionString");
-            string dbString = "Host=localhost;Database=privatechat;User Id=admin;Password=patoverde1";
+            if (!optionsBuilder.IsConfigured)
+            {
+                string dbString = "Host=localhost;Database=privatechat;User Id=admin;Password=patoverde1";
 
-            optionsBuilder.UseNpgsql(dbString);
-            base.OnConfiguring(optionsBuilder);
+                optionsBuilder.UseNpgsql(dbString);
+                base.OnConfiguring(optionsBuilder);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
