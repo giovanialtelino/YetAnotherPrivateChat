@@ -90,9 +90,9 @@ namespace YetAnotherPrivateChat.UserService
                     var _context = new MyDbContext();
                     var off = new Refresh();
 
-                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+                    var refreshToken = DecodeHeader.GetRefreshToken(context.Request.Headers);
 
-                    await off.DisableRefreshToken(dto.Token, _context);
+                    await off.DisableRefreshToken(refreshToken.Item1.id, _context);
                     await context.Response.WriteAsync("Logged off");
 
                 });
@@ -101,9 +101,9 @@ namespace YetAnotherPrivateChat.UserService
                     var _context = new MyDbContext();
                     var off = new Refresh();
 
-                    var dto = await context.Request.ReadFromJsonAsync<RefreshToken>();
+                    var refreshToken = DecodeHeader.GetRefreshToken(context.Request.Headers);
 
-                    await off.DisableAllRefreshToken(dto.Token, _context);
+                    await off.DisableAllRefreshToken(refreshToken.Item1.id, _context);
                     await context.Response.WriteAsync("Logged off from all devices");
                 });
             });
