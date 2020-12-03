@@ -38,7 +38,7 @@ namespace YetAnotherPrivateChat.UserService.Service
             await ctx.SaveChangesAsync();
 
             var refreshToken = new RefreshToken(expiration, result.Entity.RefreshTokenDbId);
-            var jwt = new JwtToken(user.UserId, user.RegistrationDate);
+            var jwt = new JwtToken(user.UserId, user.RegistrationDate, user.Admin);
 
             return new JwtRefreshDTO(refreshToken, jwt);
         }

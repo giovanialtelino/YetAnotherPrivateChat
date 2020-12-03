@@ -20,13 +20,13 @@ namespace YetAnotherPrivateChat.Shared
         {
             RoomName = roomName;
             CreatedAt = DateTime.Now;
-            Open = true;
+            Open = false;
         }
         public Room(NewRoomDTO dto)
         {
             RoomName = dto.RoomName;
             CreatedAt = DateTime.Now;
-            Open = true;
+            Open = false;
         }
         public void CloseRoom()
         {

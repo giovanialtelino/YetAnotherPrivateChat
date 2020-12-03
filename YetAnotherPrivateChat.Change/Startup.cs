@@ -58,6 +58,8 @@ namespace YetAnotherPrivateChat.Change
                     var dto = await context.Request.ReadFromJsonAsync<NewRoomDTO>();
                     var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);
 
+                    if (jwt.admin == 0) throw new Exception("You are not allowed to add a new room");
+
                     var result = await add.Add(dto, jwt.id, _context);
                 });
                 endpoints.MapPost("/editmessage", async context =>
@@ -79,6 +81,8 @@ namespace YetAnotherPrivateChat.Change
                     var dto = await context.Request.ReadFromJsonAsync<EditRoomDTO>();
                     var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);
 
+                    if (jwt.admin == 0) throw new Exception("You are not allowed to edit room details");
+
                     var result = await edit.Edit(dto, jwt.id, _context);
                     await context.Response.WriteAsJsonAsync(result);
 
@@ -99,21 +103,25 @@ namespace YetAnotherPrivateChat.Change
                     MyDbContext _context = new MyDbContext();
                     var close = new CloseRoom();
 
-                    var dto = await context.Request.ReadFromJsonAsync<DeleteMessageDTO>();
+                    var dto = await context.Request.ReadFromJsonAsync<CloseOpenRoomDTO>();
                     var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);
 
-                    var result = await close.Close(dto.MessageId, jwt.id, _context);
+                    if (jwt.admin == 0) throw new Exception("You are not allowed to close a room");
+
+                    var result = await close.Close(dto.RoomId, jwt.id, _context);
                     await context.Response.WriteAsJsonAsync(result);
                 });
                 endpoints.MapPost("/openroom", async context =>
                {
                    MyDbContext _context = new MyDbContext();
-                   var close = new CloseRoom();
+                   var open = new OpenRoom();
 
-                   var dto = await context.Request.ReadFromJsonAsync<DeleteMessageDTO>();
+                   var dto = await context.Request.ReadFromJsonAsync<CloseOpenRoomDTO>();
                    var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);
 
-                   var result = await close.Open(dto.MessageId, jwt.id, _context);
+                   if (jwt.admin == 0) throw new Exception("You are not allowed to open a room");
+
+                   var result = await open.Open(dto.RoomId, jwt.id, _context);
                    await context.Response.WriteAsJsonAsync(result);
                });
                 endpoints.MapPost("/star", async context =>
@@ -130,7 +138,7 @@ namespace YetAnotherPrivateChat.Change
                 endpoints.MapPost("/unstar", async context =>
               {
                   MyDbContext _context = new MyDbContext();
-                  var star = new StarMessage();
+                  var star = new UnStarMessage();
 
                   var dto = await context.Request.ReadFromJsonAsync<StarMessageDTO>();
                   var jwt = DecodeHeader.GetJwtToken(context.Request.Headers);

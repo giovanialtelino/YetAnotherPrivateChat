@@ -8,11 +8,9 @@ namespace YetAnotherPrivateChat.Shared.DTO
 {
     public class StarMessageDTO
     {
-        public int UserId {get;set;}
         public int MessageId {get;set;}
-        public StarMessageDTO(int userId, int messageId)
+        public StarMessageDTO(int messageId)
         {
-            UserId = userId;
             MessageId = messageId;
         }
     }

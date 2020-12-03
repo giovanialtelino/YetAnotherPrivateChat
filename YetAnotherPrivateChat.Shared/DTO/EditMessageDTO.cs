@@ -9,12 +9,10 @@ namespace YetAnotherPrivateChat.Shared.DTO
     public class EditMessageDTO
     {
         public int MessageId { get; set; }
-        public int UserId { get; set; }
         public string NewMessageText { get; set; }
-        public EditMessageDTO(int messageId, int userId, string newMessageText)
+        public EditMessageDTO(int messageId, string newMessageText)
         {
             MessageId = messageId;
-            UserId = userId;
             NewMessageText = newMessageText;
         }
     }

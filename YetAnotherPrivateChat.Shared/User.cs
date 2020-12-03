@@ -19,7 +19,7 @@ namespace YetAnotherPrivateChat.Shared
             Email = email;
             Password = password;
         }
-          public UserDTO(string username,  string password)
+        public UserDTO(string username, string password)
         {
             Username = username;
             Password = password;
@@ -40,6 +40,7 @@ namespace YetAnotherPrivateChat.Shared
         public string Username { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
+        public int Admin { get; private set; }
         public Byte[] Avatar { get; private set; }
         public DateTime RegistrationDate { get; private set; }
         public List<Message> Messages { get; private set; }
@@ -60,6 +61,7 @@ namespace YetAnotherPrivateChat.Shared
             Password = SetPassWord(password);
             RegistrationDate = DateTime.Now;
             Avatar = new Byte[0];
+            Admin = 0;
         }
 
         public User(UserDTO dto)
@@ -73,6 +75,7 @@ namespace YetAnotherPrivateChat.Shared
             Password = SetPassWord(dto.Password);
             RegistrationDate = DateTime.Now;
             Avatar = new Byte[0];
+            Admin = 0;
         }
 
         private string SetPassWord(string password)
@@ -97,6 +100,16 @@ namespace YetAnotherPrivateChat.Shared
         {
             var comparePassword = new Helper().ComparePassword(hash, password);
             return comparePassword;
+        }
+
+        public void TurnAdmin()
+        {
+            this.Admin = 1;
+        }
+
+        public void RemoveAdmin()
+        {
+            this.Admin = 0;
         }
     }
 }

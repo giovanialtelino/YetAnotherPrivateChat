@@ -21,7 +21,7 @@ namespace YetAnotherPrivateChat.UserService.Service
             if (!refreshTokenDb.Valid) throw new Exception("Credentials are invalid, log again.");
 
             //If it's still valid, just generate a new JWT
-            var newJwt = new JwtToken(refreshTokenDb.User.UserId, refreshTokenDb.User.RegistrationDate);
+            var newJwt = new JwtToken(refreshTokenDb.User.UserId, refreshTokenDb.User.RegistrationDate, refreshTokenDb.User.Admin);
 
             if (refreshTokenDb.CreationDate.AddMonths(1) <= DateTime.Now) return new JwtRefreshDTO(await RefreshRefreshToken(refreshTokenDb.User.UserId, tokenId, ctx), newJwt);
 

@@ -21,13 +21,14 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
         private static string _secret = "bad-secret";
 
         public string Token { get; init; }
-        public JwtToken(int userId, DateTime userDate)
+        public JwtToken(int userId, DateTime userDate, int admin)
         {
             var token = new JwtBuilder()
                         .WithAlgorithm(new HMACSHA256Algorithm()) // symmetric
                         .WithSecret(_secret)
                         .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
                         .AddClaim("id", userId)
+                        .AddClaim("admin", admin)
                         .AddClaim("date", userDate)
                         .Encode();
 
@@ -45,9 +46,6 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
                     .WithSecret(_secret)
                     .MustVerifySignature()
                     .Decode<JwtData>(token);
-
-            Console.WriteLine(json.date);
-            Console.WriteLine(json.id);
 
             return json;
         }

@@ -10,22 +10,18 @@ using YetAnotherPrivateChat.Shared.HelperShared.JWT;
 
 namespace YetAnotherPrivateChat.Change.Service
 {
-    public class CloseRoom
+    public class OpenRoom
     {
-        //Can only delete IF there are no users in the room
-        public async Task<Room> Close(int roomId, int jwtOwner, MyDbContext _context)
+        public async Task<Room> Open(int roomId, int jwtOwner, MyDbContext _context)
         {
             var room = await _context.Rooms.FirstOrDefaultAsync(c => c.RoomID == roomId);
 
             if (room == null) throw new Exception("Room does not exist, please contact the chat administrator.");
 
-            room.CloseRoom();
+            room.OpenRoom();
             await _context.SaveChangesAsync();
 
             return room;
         }
-
-       
     }
-
 }

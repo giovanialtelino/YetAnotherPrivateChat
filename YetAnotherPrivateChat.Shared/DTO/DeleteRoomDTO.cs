@@ -6,10 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YetAnotherPrivateChat.Shared.DTO
 {
-    public class DeleteRoomDTO
+    public class CloseOpenRoomDTO
     {
         public int RoomId { get; set; }
-        public DeleteRoomDTO(int roomId)
+        public CloseOpenRoomDTO(int roomId)
         {
             RoomId = roomId;
         }
