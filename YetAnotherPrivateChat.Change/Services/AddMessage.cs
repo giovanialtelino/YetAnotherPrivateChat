@@ -16,7 +16,11 @@ namespace YetAnotherPrivateChat.Change.Service
         public async Task<Message> Add(NewMessageDTO newMessage, int jwtOwner, MyDbContext _context)
         {
             var valid = Helper.ValidMessageText(newMessage.MessageText);
-            if(!valid) throw new Exception("Message is invalid");
+            if (!valid) throw new Exception("Message is invalid");
+
+            var room = await _context.Rooms.FirstAsync(c => c.RoomID == newMessage.RoomId);
+
+            if (!room.Open) throw new Exception("Room is closed, cannot add new messages");
 
             var message = new Message(newMessage, jwtOwner);
 
