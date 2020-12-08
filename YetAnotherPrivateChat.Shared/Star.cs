@@ -9,7 +9,6 @@ namespace YetAnotherPrivateChat.Shared
     public class Star
     {
         public int StarID { get; set; }
-        public User User { get; set; }
         public int UserId { get; set; }
         public Message Message { get; set; }
         public int MessageId { get; set; }

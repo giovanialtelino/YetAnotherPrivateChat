@@ -14,7 +14,6 @@ namespace YetAnotherPrivateChat.Shared
         public DateTime OriginalTime { get; set; }
         public DateTime MessageTime { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
         [NotMapped]
         public Reply Reply { get; set; }
         public int? ReplyId { get; set; }
@@ -68,6 +67,7 @@ namespace YetAnotherPrivateChat.Shared
             UserId = msg.UserId;
             ReplyId = msg.ReplyId;
             Version = msg.Version++;
+            RoomId = msg.RoomId;
         }
 
         public Message(Message msg, string text)
@@ -78,6 +78,7 @@ namespace YetAnotherPrivateChat.Shared
             UserId = msg.UserId;
             ReplyId = msg.ReplyId;
             Version = msg.Version++;
+            RoomId = msg.RoomId;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(0)]
         [ClassData(typeof(AddRoomTestData))]
-        public async Task AddRoom(string roomName, bool valid)
+        public async Task AddRoom(string roomName, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newRoom = new NewRoomDTO(roomName);
@@ -40,6 +40,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/addroom", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -55,7 +56,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(1)]
         [ClassData(typeof(EditRoomTestData))]
-        public async Task EditRoom(string newRoomName, int roomId, bool valid)
+        public async Task EditRoom(string newRoomName, int roomId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newRoom = new EditRoomDTO(roomId, newRoomName);
@@ -65,6 +66,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/editroom", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -80,7 +82,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(2)]
         [ClassData(typeof(CloseOpenRoomTestData))]
-        public async Task CloseRoom(int roomId, bool valid)
+        public async Task CloseRoom(int roomId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newRoom = new CloseOpenRoomDTO(roomId);
@@ -90,6 +92,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/closeroom", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -105,7 +108,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(3)]
         [ClassData(typeof(CloseOpenRoomTestData))]
-        public async Task OpenRoom(int roomId, bool valid)
+        public async Task OpenRoom(int roomId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newRoom = new CloseOpenRoomDTO(roomId);
@@ -115,6 +118,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/openroom", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -130,7 +134,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(4)]
         [ClassData(typeof(AddMessageTestData))]
-        public async Task AddMessage(string messageText, int roomId, bool valid)
+        public async Task AddMessage(string messageText, int roomId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newMessage = new NewMessageDTO(messageText, roomId);
@@ -140,6 +144,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/addmessage", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -155,7 +160,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(5)]
         [ClassData(typeof(StarUnstarMessageTestData))]
-        public async Task StarMessage(int messageId, bool valid)
+        public async Task StarMessage(int messageId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newMessage = new StarMessageDTO(messageId);
@@ -165,6 +170,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/star", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -180,7 +186,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(6)]
         [ClassData(typeof(StarUnstarMessageTestData))]
-        public async Task UnStarMessage(int messageId, bool valid)
+        public async Task UnStarMessage(int messageId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newMessage = new StarMessageDTO(messageId);
@@ -190,6 +196,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/unstar", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -205,7 +212,7 @@ namespace YetAnotherPrivateChat.Change.Test
 
         [Theory, Priority(7)]
         [ClassData(typeof(EditMessageTestData))]
-        public async Task EditMessage(int messageId, string messageText, bool valid)
+        public async Task EditMessage(int messageId, string messageText, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newMessage = new EditMessageDTO(messageId, messageText);
@@ -215,6 +222,7 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
             var response = await client.PostAsync("/editmessage", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -229,8 +237,8 @@ namespace YetAnotherPrivateChat.Change.Test
         }
 
         [Theory, Priority(8)]
-        [ClassData(typeof(StarUnstarMessageTestData))]
-        public async Task DeleteMessage(int messageId, bool valid)
+        [ClassData(typeof(DeleteMessageTestData))]
+        public async Task DeleteMessage(int messageId, JwtToken jwt, bool valid)
         {
             var client = _factory.CreateClient();
             var newMessage = new DeleteMessageDTO(messageId);
@@ -240,7 +248,8 @@ namespace YetAnotherPrivateChat.Change.Test
               Encoding.UTF8,
               "application/json");
 
-            var response = await client.PostAsync("/editmessage", addMessageJson);
+            client.DefaultRequestHeaders.Add("jwt", jwt.Token);
+            var response = await client.PostAsync("/deletemessage", addMessageJson);
             var result = await response.Content.ReadAsStringAsync();
 
             if (valid)

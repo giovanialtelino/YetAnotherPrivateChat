@@ -16,7 +16,10 @@ namespace YetAnotherPrivateChat.Change.Service
         //It's not really a edit, just create a new version, with new time and new text
         public async Task<Message> Edit(EditMessageDTO editMessageDTO, int jwtOwner, MyDbContext _context)
         {
-            var message = await _context.Messages.Include(c => c.User).FirstOrDefaultAsync(c => c.MessageId == editMessageDTO.MessageId);
+            var valid = Helper.ValidMessageText(editMessageDTO.NewMessageText);
+            if (!valid) throw new Exception("Message is invalid");
+
+            var message = await _context.Messages.FirstOrDefaultAsync(c => c.MessageId == editMessageDTO.MessageId);
 
             if (message == null) throw new Exception("Message does not exist, please contact the chat administrator");
 

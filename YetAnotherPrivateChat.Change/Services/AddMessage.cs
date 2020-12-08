@@ -15,6 +15,9 @@ namespace YetAnotherPrivateChat.Change.Service
     {
         public async Task<Message> Add(NewMessageDTO newMessage, int jwtOwner, MyDbContext _context)
         {
+            var valid = Helper.ValidMessageText(newMessage.MessageText);
+            if(!valid) throw new Exception("Message is invalid");
+
             var message = new Message(newMessage, jwtOwner);
 
             _context.Messages.Add(message);

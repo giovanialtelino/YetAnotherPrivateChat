@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="JWT" Version="7.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\YetAnotherPrivateChat.Shared\YetAnotherPrivateChat.Shared.csproj" />
   </ItemGroup>
 

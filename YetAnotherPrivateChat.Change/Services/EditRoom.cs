@@ -16,6 +16,10 @@ namespace YetAnotherPrivateChat.Change.Service
         //It's not really a edit, just create a new version, with new time and new text
         public async Task<Room> Edit(EditRoomDTO editRoom, int jwtOwner, MyDbContext _context)
         {
+
+var helper = Helper.ValidRoomName(editRoom.NewName);
+if(!helper) throw new Exception("Room name is invalid");
+
             var room = await _context.Rooms.FirstOrDefaultAsync(c => c.RoomID == editRoom.RoomId);
 
             if (room == null) throw new Exception("Room does not exist, please contact the chat administrator");
