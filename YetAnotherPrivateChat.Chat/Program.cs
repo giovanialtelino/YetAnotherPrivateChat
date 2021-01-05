@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using YetAnotherPrivateChat.Chat.Context;
 
 namespace YetAnotherPrivateChat.Chat
 {
@@ -13,6 +14,8 @@ namespace YetAnotherPrivateChat.Chat
     {
         public static void Main(string[] args)
         {
+            var ctx = new MyDbContext();
+            StartDbContext.StartDb(ctx);
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -21,6 +24,7 @@ namespace YetAnotherPrivateChat.Chat
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5003");
                 });
     }
 }

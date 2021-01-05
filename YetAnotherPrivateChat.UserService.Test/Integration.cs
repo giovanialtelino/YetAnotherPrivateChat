@@ -49,11 +49,7 @@ namespace YetAnotherPrivateChat.UserService.Test
             var client = _factory.CreateClient();
 
             var userDto = new UserDTO(username, email, pwd);
-
-            var registerItemJson = new StringContent(
-              JsonConvert.SerializeObject(userDto),
-              Encoding.UTF8,
-              "application/json");
+            var registerItemJson = ToJsonTest.ObjectToJson(userDto);              
 
             var response = await client.PostAsync("/register", registerItemJson);
             var result = await response.Content.ReadAsStringAsync();
@@ -77,11 +73,7 @@ namespace YetAnotherPrivateChat.UserService.Test
             var client = _factory.CreateClient();
 
             var userDto = new UserDTO(username, pwd);
-
-            var registerItemJson = new StringContent(
-                         JsonConvert.SerializeObject(userDto),
-                         Encoding.UTF8,
-                         "application/json");
+            var registerItemJson = ToJsonTest.ObjectToJson(userDto);              
 
             var response = await client.PostAsync("/login", registerItemJson);
             var result = await response.Content.ReadAsStringAsync();
@@ -151,10 +143,7 @@ namespace YetAnotherPrivateChat.UserService.Test
 
             var userDto = new UserDTO(username, pwd);
 
-            var loginJSON = new StringContent(
-                         JsonConvert.SerializeObject(userDto),
-                         Encoding.UTF8,
-                         "application/json");
+            var loginJSON = ToJsonTest.ObjectToJson(userDto);              
 
             //We need to test the whole pipeline here, first we login
             var response = await client.PostAsync("/login", loginJSON);
@@ -190,11 +179,7 @@ namespace YetAnotherPrivateChat.UserService.Test
             var client = _factory.CreateClient();
 
             var userDto = new UserDTO(username, pwd);
-
-            var loginJSON = new StringContent(
-                         JsonConvert.SerializeObject(userDto),
-                         Encoding.UTF8,
-                         "application/json");
+            var loginJSON = ToJsonTest.ObjectToJson(userDto);              
 
             //need to login a lot of times, to collect multiple refresh tokens, we will do five times.
 

@@ -33,7 +33,7 @@ namespace YetAnotherPrivateChat.Shared
         }
          public void OpenRoom()
         {
-            this.Open = false;
+            this.Open = true;
         }
     }
 }
