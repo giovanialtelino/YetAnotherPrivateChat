@@ -30,13 +30,13 @@ namespace YetAnotherPrivateChat.Shared.HelperShared.JWT
             return helper;
         }
 
-         public static Tuple<RefreshData, string> GetRefreshToken(IHeaderDictionary header)
+         public static (RefreshData refreshToken, string token) GetRefreshToken(IHeaderDictionary header)
         {
             var refresh = header.FirstOrDefault(c => c.Key == "ref").Value;
             if (string.IsNullOrWhiteSpace(refresh)) throw new Exception("No valid token found");
 
             var helper = DecodeRefresh.DecodeToken(refresh);
-            return new Tuple<RefreshData, string>(helper, refresh);
+            return (helper, refresh);
         }
     }
 }

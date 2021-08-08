@@ -12,23 +12,28 @@ namespace YetAnotherPrivateChat.UserService.Service
 {
     public class Refresh
     {
-        public async Task<JwtRefreshDTO> RefreshJWT(int tokenId, string refresh, MyDbContext ctx)
+        private readonly MyDbContext _context;
+        public Refresh(MyDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<JwtRefreshDTO> RefreshJWT(int tokenId, string refresh)
         {
             var refreshHelper = new RefreshToken(refresh);
 
-            var refreshTokenDb = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
+            var refreshTokenDb = await _context.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
 
             if (!refreshTokenDb.Valid) throw new Exception("Credentials are invalid, log again.");
 
             //If it's still valid, just generate a new JWT
             var newJwt = new JwtToken(refreshTokenDb.User.UserId, refreshTokenDb.User.RegistrationDate, refreshTokenDb.User.Admin);
 
-            if (refreshTokenDb.CreationDate.AddMonths(1) <= DateTime.Now) return new JwtRefreshDTO(await RefreshRefreshToken(refreshTokenDb.User.UserId, tokenId, ctx), newJwt);
+            if (refreshTokenDb.CreationDate.AddMonths(1) <= DateTime.Now) return new JwtRefreshDTO(await RefreshRefreshToken(refreshTokenDb.User.UserId, tokenId), newJwt);
 
             return new JwtRefreshDTO(refreshHelper, newJwt);
         }
 
-        public async Task<RefreshToken> RefreshRefreshToken(int userId, int tokenId, MyDbContext ctx)
+        public async Task<RefreshToken> RefreshRefreshToken(int userId, int tokenId)
         {
             /*
             If the Refresh token is already older than one month, a new one is created.
@@ -41,41 +46,41 @@ namespace YetAnotherPrivateChat.UserService.Service
 
             var refreshTokenDb = new RefreshTokenDb(userId, expiration);
 
-            var result = ctx.RefreshDb.Add(refreshTokenDb);
-            await ctx.SaveChangesAsync();
+            var result = _context.RefreshDb.Add(refreshTokenDb);
+            await _context.SaveChangesAsync();
 
             var refreshToken = new RefreshToken(expiration, result.Entity.RefreshTokenDbId);
 
-            await DisableRefreshToken(tokenId, ctx);
+            await DisableRefreshToken(tokenId);
 
             return refreshToken;
         }
 
-        public async Task DisableRefreshToken(int tokenId, MyDbContext ctx)
+        public async Task DisableRefreshToken(int tokenId)
         {
             /*
             Set the specific refresh token as invalid, could be called if the user ask for log out, or a new refresh token is created.
             */
-            var refreshDb = await ctx.RefreshDb.FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
+            var refreshDb = await _context.RefreshDb.FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
             refreshDb.InvalidateToken();
 
-            await ctx.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
-        public async Task DisableAllRefreshToken(int tokenId, MyDbContext ctx)
+        public async Task DisableAllRefreshToken(int tokenId)
         {
             /*
             Set the specific refresh token as invalid, could be called if the user ask for log out, or a new refresh token is created.
             */
-            var userId = await ctx.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
+            var userId = await _context.RefreshDb.Include(c => c.User).FirstOrDefaultAsync(c => c.RefreshTokenDbId == tokenId);
 
-            var refreshTokens = await ctx.RefreshDb.Where(c => c.UserId == userId.UserId).ToListAsync();
+            var refreshTokens = await _context.RefreshDb.Where(c => c.UserId == userId.UserId).ToListAsync();
 
             foreach (var t in refreshTokens)
             {
                 t.InvalidateToken();
             }
 
-            await ctx.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

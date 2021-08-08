@@ -12,7 +12,14 @@ namespace YetAnotherPrivateChat.UserService.Service
 {
     public class Login
     {
-        public async Task<JwtRefreshDTO> AllowLogin(string username, string password, MyDbContext ctx)
+        private readonly MyDbContext _context;
+
+        public Login(MyDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<JwtRefreshDTO> AllowLogin(string username, string password)
         {
             var helperShared = new YetAnotherPrivateChat.Shared.HelperShared.Helper();
 
@@ -34,8 +41,8 @@ namespace YetAnotherPrivateChat.UserService.Service
 
             var refreshTokenDb = new RefreshTokenDb(user.UserId, expiration);
 
-            var result = ctx.RefreshDb.Add(refreshTokenDb);
-            await ctx.SaveChangesAsync();
+            var result = _context.RefreshDb.Add(refreshTokenDb);
+            await _context.SaveChangesAsync();
 
             var refreshToken = new RefreshToken(expiration, result.Entity.RefreshTokenDbId);
             var jwt = new JwtToken(user.UserId, user.RegistrationDate, user.Admin);
